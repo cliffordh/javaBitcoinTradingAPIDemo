@@ -1,4 +1,4 @@
-package sample;
+package com.bitso.example;
 
 import java.io.IOException;
 import java.net.URI;
@@ -14,10 +14,11 @@ public class WSClient {
     private final String uri="wss://ws.bitso.com";
     private Session session;
 
-   public static void main(String[] args) {
-       WSClient w=new WSClient();
-       w.connect();
-   }
+    private Controller appController;
+
+    public WSClient(Controller appController) {
+        this.appController=appController;
+    }
 
     public void connect() {
 
@@ -44,6 +45,11 @@ public class WSClient {
     @OnMessage
     public void onMessage(String message, Session session){
         System.out.println(message);
+
+        // determine type of message and dispatch to controller if a "diff-order"
+        if(message.contains("diff-orders") && !message.contains("subscribe")) {
+            appController.diffOrderReceived(message);
+        }
     }
 
     public void sendMessage(String message){
