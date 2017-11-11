@@ -44,7 +44,7 @@ public class WSClient {
 
     @OnMessage
     public void onMessage(String message, Session session){
-        System.out.println(message);
+//        System.out.println(message);
 
         // determine type of message and dispatch to controller if a "diff-order"
         if(message.contains("diff-orders") && !message.contains("subscribe")) {
@@ -55,7 +55,7 @@ public class WSClient {
     public void sendMessage(String message){
         try {
             session.getBasicRemote().sendText(message);
-            System.out.println(message);
+//            System.out.println(message);
         } catch (IOException ex) {
             System.out.println(ex);
         }

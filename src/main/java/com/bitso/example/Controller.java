@@ -8,10 +8,12 @@ import java.net.URL;
 import java.net.HttpURLConnection;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
-import java.util.List;
 
 /* Controller will coordinate networking and model updates. */
 public class Controller {
@@ -21,9 +23,11 @@ public class Controller {
     private WSClient wsClient;
 
     private final ExecutorService executorService = Executors.newCachedThreadPool();
+    private final ScheduledExecutorService scheduledService = Executors.newScheduledThreadPool(2);
 
     private APIResponse apiResponse;
-    private static final String JSON_URL = "https://api.bitso.com/v3/order_book/?book=btc_mxn&aggregate=false";
+    private static final String ORDER_URL = "https://api.bitso.com/v3/order_book/?book=btc_mxn&aggregate=false";
+    private static final String TRADES_URL = "https://api.bitso.com/v3/trades/?book=btc_mxn";
 
     private Main main;
 
@@ -39,12 +43,28 @@ public class Controller {
         orderBookModel = new OrderBookModel();
         wsClient = new WSClient(this);
         wsClient.connect();
-        executorService.submit(fetchResponse);
+        // use executorservice for one off run
+        executorService.submit(fetchOrders);
+        // use scheduledservice for repeated run
+        scheduledService.scheduleWithFixedDelay(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Gson gson = new Gson();
+                    String tradesJSON = readUrl(TRADES_URL);
+//                response = new Gson().fromJson(tradesJSON, APIResponse.class);
+                    System.out.println(tradesJSON);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
 
-        fetchResponse.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+        },0,1,TimeUnit.SECONDS);
+
+        fetchOrders.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
             @Override
             public void handle(WorkerStateEvent t) {
-                apiResponse = fetchResponse.getValue();
+                apiResponse = fetchOrders.getValue();
                 orderBookModel.setPayload(apiResponse.getPayload());
             }
         });
@@ -92,19 +112,31 @@ public class Controller {
     }
 
     /**
-     * Task to fetch details from JSONURL
+     * Task to fetch orders from ORDER_URL
      * @param <V>
      */
-    private Task<APIResponse> fetchResponse = new Task() {
+    private Task<APIResponse> fetchOrders = new Task() {
         @Override
         protected APIResponse call() throws Exception {
             APIResponse response = null;
             try {
                 Gson gson = new Gson();
-                response = new Gson().fromJson(readUrl(JSON_URL), APIResponse.class);
+                response = new Gson().fromJson(readUrl(ORDER_URL), APIResponse.class);
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            return response;
+        }
+    };
+
+    /**
+     * Task to fetch trades from TRADES_URL
+     * @param <V>
+     */
+    private Task<APIResponse> fetchTrades = new Task() {
+        @Override
+        protected APIResponse call() throws Exception {
+            APIResponse response = null;
             return response;
         }
     };

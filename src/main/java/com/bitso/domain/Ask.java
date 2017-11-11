@@ -2,6 +2,8 @@ package com.bitso.domain;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import javafx.beans.property.StringProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 public class Ask {
     @SerializedName("book")
@@ -9,14 +11,17 @@ public class Ask {
     private String book;
     @SerializedName("price")
     @Expose
-    private Double price;
+    private String price;
     @SerializedName("amount")
     @Expose
-    private Double amount;
+    private String amount;
 
     @SerializedName("oid")
     @Expose
     private String oid;
+
+    private StringProperty amountProperty=new SimpleStringProperty();
+    private StringProperty priceProperty=new SimpleStringProperty();
 
     public String getBook() {
         return book;
@@ -26,25 +31,35 @@ public class Ask {
         this.book = book;
     }
 
-    public Double getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setPrice(String price) {
+        this.price=price;
+        this.priceProperty.set(price);
     }
 
-    public Double getAmount() {
+    public String getAmount() {
         return amount;
     }
 
-    public void setAmount(Double amount) {
-        this.amount = amount;
+    public void setAmount(String amount) {
+        this.amount=amount;
+        this.amountProperty.set(amount);
     }
+
     public String getOid() {
         return oid;
     }
     public void setOid(String oid) {
         this.oid = oid;
+    }
+
+    public StringProperty getPriceProperty() {
+        return priceProperty;
+    }
+    public StringProperty getAmountProperty() {
+        return amountProperty;
     }
 }

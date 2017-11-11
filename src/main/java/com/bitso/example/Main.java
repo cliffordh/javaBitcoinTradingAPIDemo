@@ -50,7 +50,7 @@ public class Main extends Application {
         bidCol.setCellValueFactory(new PropertyValueFactory<Bid,String>("price"));
         bidAmountCol.setCellValueFactory(new PropertyValueFactory<Bid,String>("amount"));
 
-        bidTableView.setItems(appController.getOrderBookModel().getObservableBids());
+        bidTableView.setItems(appController.getOrderBookModel().getSortedObservableBids());
 
         TableColumn askCol = new TableColumn("Ask");
         TableColumn askAmountCol = new TableColumn("Amount");
@@ -61,7 +61,7 @@ public class Main extends Application {
         askCol.setCellValueFactory(new PropertyValueFactory<Ask,String>("price"));
         askAmountCol.setCellValueFactory(new PropertyValueFactory<Ask,String>("amount"));
 
-        askTableView.setItems(appController.getOrderBookModel().getObservableAsks());
+        askTableView.setItems(appController.getOrderBookModel().getSortedObservableAsks());
 
         grid.add(bidTableView,0,1);
         grid.add(askTableView,1,1);
