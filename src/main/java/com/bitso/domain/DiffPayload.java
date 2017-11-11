@@ -13,13 +13,13 @@ public class DiffPayload {
     private Long d;
     @SerializedName("r")
     @Expose
-    private String r;
+    private Double r;
     @SerializedName("t")
     @Expose
     private Integer t;
     @SerializedName("a")
     @Expose
-    private String a;
+    private Double a;
     @SerializedName("v")
     @Expose
     private String v;
@@ -43,11 +43,11 @@ public class DiffPayload {
         this.d = d;
     }
 
-    public String getR() {
+    public Double getR() {
         return r;
     }
 
-    public void setR(String r) {
+    public void setR(Double r) {
         this.r = r;
     }
 
@@ -59,11 +59,11 @@ public class DiffPayload {
         this.t = t;
     }
 
-    public String getA() {
+    public Double getA() {
         return a;
     }
 
-    public void setA(String a) {
+    public void setA(Double a) {
         this.a = a;
     }
 

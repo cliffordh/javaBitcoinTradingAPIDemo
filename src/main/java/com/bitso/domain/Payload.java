@@ -18,7 +18,7 @@ public class Payload {
         private List<Ask> asks = null;
         @SerializedName("sequence")
         @Expose
-        private String sequence;
+        private Integer sequence;
 
         public String getUpdatedAt() {
             return updatedAt;
@@ -44,11 +44,11 @@ public class Payload {
             this.asks = asks;
         }
 
-        public String getSequence() {
+        public Integer getSequence() {
             return sequence;
         }
 
-        public void setSequence(String sequence) {
+        public void setSequence(Integer sequence) {
             this.sequence = sequence;
         }
 

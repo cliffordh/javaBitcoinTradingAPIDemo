@@ -9,10 +9,10 @@ public class Ask {
     private String book;
     @SerializedName("price")
     @Expose
-    private String price;
+    private Double price;
     @SerializedName("amount")
     @Expose
-    private String amount;
+    private Double amount;
 
     @SerializedName("oid")
     @Expose
@@ -26,19 +26,19 @@ public class Ask {
         this.book = book;
     }
 
-    public String getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
-    public String getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
     public String getOid() {

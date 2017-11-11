@@ -27,6 +27,10 @@ public class Controller {
 
     private Main main;
 
+    public OrderBookModel getOrderBookModel() {
+        return orderBookModel;
+    }
+
     public void init(Main main) {
         // create OrderBookModel
         // open websocket, pass an instance of this to receive messages
@@ -42,8 +46,6 @@ public class Controller {
             public void handle(WorkerStateEvent t) {
                 apiResponse = fetchResponse.getValue();
                 orderBookModel.setPayload(apiResponse.getPayload());
-                // tell the UI to draw itself
-                main.updateGridPane(orderBookModel.getBids(),orderBookModel.getAsks());
             }
         });
     }
