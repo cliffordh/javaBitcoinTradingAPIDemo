@@ -22,6 +22,7 @@ public class Main extends Application {
     private Controller appController;
     private TableView bidTableView = new TableView();
     private TableView askTableView = new TableView();
+    private TableView tradeTableView = new TableView();
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -46,6 +47,7 @@ public class Main extends Application {
 
         bidTableView.getColumns().addAll(bidCol, bidAmountCol);
         bidTableView.setMaxWidth(200);
+        bidTableView.setMaxHeight(300);
 
         bidCol.setCellValueFactory(new PropertyValueFactory<Bid,String>("price"));
         bidAmountCol.setCellValueFactory(new PropertyValueFactory<Bid,String>("amount"));
@@ -57,14 +59,25 @@ public class Main extends Application {
 
         askTableView.getColumns().addAll(askCol, askAmountCol);
         askTableView.setMaxWidth(200);
+        askTableView.setMaxHeight(300);
 
         askCol.setCellValueFactory(new PropertyValueFactory<Ask,String>("price"));
         askAmountCol.setCellValueFactory(new PropertyValueFactory<Ask,String>("amount"));
 
         askTableView.setItems(appController.getOrderBookModel().getSortedObservableAsks());
 
+        TableColumn descriptionCol = new TableColumn("Recent Trades");
+        tradeTableView.getColumns().addAll(descriptionCol);
+        tradeTableView.setMaxWidth(420);
+        tradeTableView.setMaxHeight(200);
+
+        descriptionCol.setCellValueFactory(new PropertyValueFactory<TradePayload,String>("description"));
+
+        tradeTableView.setItems(appController.getTradesModel().getTrades());
+
         grid.add(bidTableView,0,1);
         grid.add(askTableView,1,1);
+        grid.add(tradeTableView,0,2,2,1);
 
         ScrollPane scrollPane = new ScrollPane(grid);
 

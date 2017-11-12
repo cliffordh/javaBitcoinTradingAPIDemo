@@ -35,12 +35,17 @@ public class Controller {
         return orderBookModel;
     }
 
+    public TradesModel getTradesModel() {
+        return tradesModel;
+    }
+
     public void init(Main main) {
         // create OrderBookModel
         // open websocket, pass an instance of this to receive messages
         // fetch OrderBook from RESTish endpoint
         this.main = main; // use for GUI callbacks
         orderBookModel = new OrderBookModel();
+        tradesModel = new TradesModel();
         wsClient = new WSClient(this);
         wsClient.connect();
         // use executorservice for one off run
@@ -52,8 +57,10 @@ public class Controller {
                 try {
                     Gson gson = new Gson();
                     String tradesJSON = readUrl(TRADES_URL);
-//                response = new Gson().fromJson(tradesJSON, APIResponse.class);
+                    TradeResponse response = new Gson().fromJson(tradesJSON, TradeResponse.class);
+                    tradesModel.setTradeResponse(response);
                     System.out.println(tradesJSON);
+                    System.out.println(response.getPayload().size());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -83,6 +90,7 @@ public class Controller {
 
     public void shutdown() {
         executorService.shutdown();
+        scheduledService.shutdown();
     }
 
     /**
