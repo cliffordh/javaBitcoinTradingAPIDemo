@@ -59,8 +59,8 @@ public class Controller {
                     String tradesJSON = readUrl(TRADES_URL);
                     TradeResponse response = new Gson().fromJson(tradesJSON, TradeResponse.class);
                     tradesModel.setTradeResponse(response);
-                    System.out.println(tradesJSON);
-                    System.out.println(response.getPayload().size());
+                    //System.out.println(tradesJSON);
+                    //System.out.println(response.getPayload().size());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
