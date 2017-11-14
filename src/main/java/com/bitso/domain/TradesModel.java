@@ -33,7 +33,10 @@ public class TradesModel {
 
     public TradesModel() {
         trades = FXCollections.observableArrayList();
+        setMupticks(3); // reasonable defaults for contrarian algorithm
+        setNdownticks(2);
     }
+
     public ObservableList<TradePayload> getTrades() {
         return trades;
     }
@@ -45,10 +48,6 @@ public class TradesModel {
         int downtick=0;
         String prevprice="";
         int counter = 0;
-
-        // dummy data for contrarian algorithm
-        Mupticks = 3;
-        Ndownticks = 2;
 
         List<TradePayload> algoAndNaturalTrades=new ArrayList<TradePayload>();
 

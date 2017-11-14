@@ -9,6 +9,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
@@ -18,11 +22,25 @@ import com.bitso.domain.*;
 
 public class Main extends Application {
 
-    private static final Integer MAX_BIDASKS = 10; // make a command line parameter
     private Controller appController;
+
+    public TableView getBidTableView() {
+        return bidTableView;
+    }
+
     private TableView bidTableView = new TableView();
+
+    public TableView getAskTableView() {
+        return askTableView;
+    }
+
     private TableView askTableView = new TableView();
     private TableView tradeTableView = new TableView();
+
+    final TextField XtextField = new TextField();
+    final TextField MtextField = new TextField();
+    final TextField NtextField = new TextField();
+    private Button applyButton = new Button();
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -52,7 +70,7 @@ public class Main extends Application {
         bidCol.setCellValueFactory(new PropertyValueFactory<Bid,String>("price"));
         bidAmountCol.setCellValueFactory(new PropertyValueFactory<Bid,String>("amount"));
 
-        bidTableView.setItems(appController.getOrderBookModel().getSortedObservableBids());
+        bidTableView.setItems(appController.getOrderBookModel().getSortedFilteredObservableBids());
 
         TableColumn askCol = new TableColumn("Ask");
         TableColumn askAmountCol = new TableColumn("Amount");
@@ -64,7 +82,7 @@ public class Main extends Application {
         askCol.setCellValueFactory(new PropertyValueFactory<Ask,String>("price"));
         askAmountCol.setCellValueFactory(new PropertyValueFactory<Ask,String>("amount"));
 
-        askTableView.setItems(appController.getOrderBookModel().getSortedObservableAsks());
+        askTableView.setItems(appController.getOrderBookModel().getSortedFilteredObservableAsks());
 
         TableColumn descriptionCol = new TableColumn("Recent Trades");
         tradeTableView.getColumns().addAll(descriptionCol);
@@ -79,9 +97,61 @@ public class Main extends Application {
         grid.add(askTableView,1,1);
         grid.add(tradeTableView,0,2,2,1);
 
+        //Creating a GridPane container
+        GridPane parametersGrid = new GridPane();
+        parametersGrid.setPadding(new Insets(10, 10, 10, 10));
+        parametersGrid.setVgap(5);
+        parametersGrid.setHgap(5);
+
+        XtextField.setPromptText("X");
+        XtextField.setPrefColumnCount(3);
+        XtextField.getText();
+        GridPane.setConstraints(XtextField, 0, 0);
+        parametersGrid.getChildren().add(XtextField);
+
+        MtextField.setPrefColumnCount(2);
+        MtextField.setPromptText("M");
+        GridPane.setConstraints(MtextField, 0, 1);
+        parametersGrid.getChildren().add(MtextField);
+
+        NtextField.setPrefColumnCount(2);
+        NtextField.setPromptText("N");
+        GridPane.setConstraints(NtextField, 0, 2);
+        parametersGrid.getChildren().add(NtextField);
+
+        applyButton = new Button("Apply");
+        GridPane.setConstraints(applyButton, 1, 0);
+        parametersGrid.getChildren().add(applyButton);
+        applyButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                try {
+                    if(!XtextField.getText().isEmpty())
+                    {
+                        appController.getOrderBookModel().setMaxBidAsks(Integer.parseInt(XtextField.getText()));
+                    }
+                    if(!MtextField.getText().isEmpty())
+                    {
+                        appController.getTradesModel().setMupticks(Integer.parseInt(MtextField.getText()));
+                    }
+                    if(!NtextField.getText().isEmpty()) {
+                        appController.getTradesModel().setNdownticks(Integer.parseInt(NtextField.getText()));
+                    }
+                    askTableView.refresh();
+                    bidTableView.refresh();
+                } catch (Exception ex)
+                {
+                    System.out.println("Invalid Input");
+                }
+            }
+        });
+
+        grid.add(parametersGrid,0,3,2,1);
+        Label infoText = new Label("Changes apply on next update. Defaults X=999, M=3, N=2");
+        grid.add(infoText,0,4,2,1);
+
         ScrollPane scrollPane = new ScrollPane(grid);
 
-        Scene scene = new Scene(scrollPane, 440, 600);
+        Scene scene = new Scene(scrollPane, 440, 700);
         stage.setScene(scene);
         stage.setTitle("Bitso Trading Programming Challenge");
         stage.show();

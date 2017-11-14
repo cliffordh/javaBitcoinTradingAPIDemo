@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.beans.Observable;
 import javafx.util.Callback;
 import javafx.collections.transformation.SortedList;
+import javafx.collections.transformation.FilteredList;
 
 public class OrderBookModel {
     // contains snapshot of bids/asks
@@ -19,14 +20,28 @@ public class OrderBookModel {
     private ObservableList<Ask> asks;
     private SortedList<Bid> sortedBids;
     private SortedList<Ask> sortedAsks;
+    private FilteredList<Bid> filteredBids;
+    private FilteredList<Ask> filteredAsks;
 
     private HashMap<String, Bid> bidHashMap;
     private HashMap<String, Ask> askHashMap;
 
     private Payload payload;
 
+    private Integer maxBidAsks; // make a command line parameter
+
+    public Integer getMaxBidAsks() {
+        return maxBidAsks;
+    }
+
+    public void setMaxBidAsks(Integer maxBidAsks) {
+        this.maxBidAsks = maxBidAsks;
+    }
+
     public OrderBookModel() {
+        maxBidAsks = 999;
         diffOrders = new ArrayList<DiffOrder>();
+
         bids = FXCollections.observableArrayList(
                 new Callback<Bid, Observable[]>() {
                     @Override
@@ -71,13 +86,16 @@ public class OrderBookModel {
                         return 0;
                     }
                 });
+
+        filteredBids = new FilteredList<>(sortedBids,bid -> sortedBids.indexOf(bid)<this.maxBidAsks);
+        filteredAsks = new FilteredList<>(sortedAsks,ask -> sortedAsks.indexOf(ask)<this.maxBidAsks);
+
         bidHashMap = new HashMap<>();
         askHashMap = new HashMap<>();
     }
 
     public void addDiffOrder(DiffOrder o) {
         diffOrders.add(o);
-//        System.out.println("Added diff-order. Count is " + diffOrders.size());
 
         if (payload != null) {
 
@@ -87,7 +105,6 @@ public class OrderBookModel {
                 // iterate diffOrders
                 for (DiffOrder diff : diffOrders) {
                     if (diff.getSequence() < payload.getSequence()) {
-//                        System.out.println("Removing diff sequence: " + diff.getSequence());
                         toRemove.add(diff);
                         continue;
                     }
@@ -127,7 +144,6 @@ public class OrderBookModel {
                                     asks.add(a);
                                     break;
                             }
-//                            System.out.println("NEW ORDER");
                         }
                     } else if (op.equals("cancelled")) {
                         bids.remove(b);
@@ -154,18 +170,10 @@ public class OrderBookModel {
         asks.forEach(ask -> askHashMap.put(ask.getOid(), ask));
     }
 
-    public ObservableList<Bid> getObservableBids() {
-        return bids;
+    public FilteredList<Bid> getSortedFilteredObservableBids() {
+        return filteredBids;
     }
-
-    public ObservableList<Ask> getObservableAsks() {
-        return asks;
-    }
-
-    public SortedList<Bid> getSortedObservableBids() {
-        return sortedBids;
-    }
-    public SortedList<Ask> getSortedObservableAsks() {
-        return sortedAsks;
+    public FilteredList<Ask> getSortedFilteredObservableAsks() {
+        return filteredAsks;
     }
 }
