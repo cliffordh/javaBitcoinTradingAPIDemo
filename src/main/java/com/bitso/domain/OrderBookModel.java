@@ -39,9 +39,8 @@ public class OrderBookModel {
     }
 
     public OrderBookModel() {
-        maxBidAsks = 999;
+        maxBidAsks = 10;
         diffOrders = new ArrayList<DiffOrder>();
-
         bids = FXCollections.observableArrayList(
                 new Callback<Bid, Observable[]>() {
                     @Override
@@ -157,7 +156,6 @@ public class OrderBookModel {
                 diffOrders.removeAll(toRemove);
             }
         }
-
     }
 
     public void setPayload(Payload payload) {

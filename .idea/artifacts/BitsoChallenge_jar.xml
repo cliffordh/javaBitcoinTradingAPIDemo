@@ -1,0 +1,18 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="BitsoChallenge:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/BitsoChallenge_jar</output-path>
+    <root id="archive" name="BitsoChallenge.jar">
+      <element id="module-output" name="BitsoChallenge" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/glassfish/tyrus/tyrus-spi/1.12/tyrus-spi-1.12.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/glassfish/tyrus/bundles/tyrus-standalone-client/1.12/tyrus-standalone-client-1.12.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.8.2/gson-2.8.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/guava/guava/13.0-rc1/guava-13.0-rc1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/glassfish/grizzly/grizzly-http-server/2.3.22/grizzly-http-server-2.3.22.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/glassfish/tyrus/tyrus-container-grizzly-client/1.12/tyrus-container-grizzly-client-1.12.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/glassfish/tyrus/tyrus-core/1.12/tyrus-core-1.12.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/glassfish/grizzly/grizzly-framework/2.3.22/grizzly-framework-2.3.22.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/glassfish/grizzly/grizzly-http/2.3.22/grizzly-http-2.3.22.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/glassfish/tyrus/tyrus-client/1.12/tyrus-client-1.12.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
